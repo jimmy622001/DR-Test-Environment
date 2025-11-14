@@ -1,0 +1,43 @@
+{
+  "description": "CPU stress test for EC2 instances",
+  "stopConditions": [
+    {
+      "source": "none"
+    }
+  ],
+  "targets": {
+    "ec2-instances": {
+      "resourceType": "aws:ec2:instance",
+      "resourceTags": {
+        "Environment": "dr-test"
+      },
+      "filters": [
+        {
+          "path": "State.Name",
+          "values": ["running"]
+        }
+      ],
+      "selectionMode": "COUNT(2)"
+    }
+  },
+  "actions": {
+    "stress-cpu": {
+      "actionId": "aws:ec2:stress-cpu",
+      "parameters": {
+        "durationSeconds": "300",
+        "cpuPercentage": "80"
+      },
+      "targets": {
+        "Instances": "ec2-instances"
+      }
+    }
+  },
+  "roleArn": "arn:aws:iam::123456789012:role/FISExecutionRole",
+  "tags": {
+    "Name": "dr-test-cpu-stress",
+    "Purpose": "Disaster Recovery Testing"
+  },
+  "experimentOptions": {
+    "emptyTargetResolutionMode": "skip"
+  }
+}

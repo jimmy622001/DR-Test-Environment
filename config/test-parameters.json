@@ -1,0 +1,156 @@
+{
+  "general": {
+    "project_name": "aws-dr-testing",
+    "environment_tag": "dr-test",
+    "team_email": "dr-testing@example.com",
+    "aws_account_id": "123456789012"
+  },
+  "test_thresholds": {
+    "resilience": {
+      "rto": {
+        "critical": 60,
+        "high": 300,
+        "medium": 900,
+        "low": 1800
+      },
+      "rpo": {
+        "critical": 30,
+        "high": 300,
+        "medium": 900,
+        "low": 1800
+      },
+      "availability": {
+        "critical": 99.99,
+        "high": 99.9,
+        "medium": 99.5,
+        "low": 99.0
+      }
+    },
+    "security": {
+      "vulnerability_severity": {
+        "critical": "immediate remediation required",
+        "high": "remediation within 7 days",
+        "medium": "remediation within 30 days",
+        "low": "remediation within 90 days"
+      },
+      "compliance_requirements": [
+        "encryption_in_transit",
+        "encryption_at_rest",
+        "authentication",
+        "authorization",
+        "audit_logging"
+      ]
+    },
+    "performance": {
+      "response_time_ms": {
+        "api": 200,
+        "web": 2000,
+        "database": 100
+      },
+      "throughput": {
+        "api_requests_per_second": 1000,
+        "database_transactions_per_second": 500
+      },
+      "resource_utilization": {
+        "cpu_max_percent": 70,
+        "memory_max_percent": 80,
+        "disk_io_max_percent": 70
+      }
+    }
+  },
+  "test_scenarios": {
+    "resilience": [
+      {
+        "id": "ec2-instance-failure",
+        "name": "EC2 Instance Failure Recovery",
+        "description": "Test recovery from EC2 instance failure",
+        "aws_service": "EC2",
+        "fis_template": "cpu-stress.json",
+        "duration_seconds": 300
+      },
+      {
+        "id": "rds-failover",
+        "name": "RDS Failover Recovery",
+        "description": "Test recovery from RDS failover event",
+        "aws_service": "RDS",
+        "fis_template": null,
+        "custom_script": "scripts/custom/trigger-rds-failover.sh",
+        "duration_seconds": 600
+      },
+      {
+        "id": "az-failure",
+        "name": "Availability Zone Failure",
+        "description": "Test recovery from AZ failure",
+        "aws_service": "Multiple",
+        "fis_template": "az-outage.json",
+        "duration_seconds": 900
+      },
+      {
+        "id": "network-latency",
+        "name": "Network Latency Test",
+        "description": "Test performance under increased network latency",
+        "aws_service": "EC2",
+        "fis_template": "network-latency.json",
+        "duration_seconds": 600
+      },
+      {
+        "id": "region-failover",
+        "name": "Regional Failover Test",
+        "description": "Test failover to DR region",
+        "aws_service": "Multiple",
+        "fis_template": null,
+        "custom_script": "scripts/custom/trigger-region-failover.sh",
+        "duration_seconds": 1800
+      }
+    ],
+    "security": [
+      {
+        "id": "iam-validation",
+        "name": "IAM Permissions Validation",
+        "description": "Test IAM permissions transfer to DR",
+        "aws_service": "IAM",
+        "inspec_profile": "inspec/profiles/dr/controls/iam.rb"
+      },
+      {
+        "id": "security-groups-validation",
+        "name": "Security Groups Validation",
+        "description": "Test security group configuration in DR",
+        "aws_service": "EC2",
+        "inspec_profile": "inspec/profiles/dr/controls/security_groups.rb"
+      },
+      {
+        "id": "encryption-validation",
+        "name": "Encryption Validation",
+        "description": "Test data encryption at rest and in transit",
+        "aws_service": "Multiple",
+        "inspec_profile": "inspec/profiles/dr/controls/encryption.rb"
+      }
+    ],
+    "performance": [
+      {
+        "id": "load-test-baseline",
+        "name": "Baseline Load Test",
+        "description": "Establish performance baseline",
+        "user_count": 100,
+        "duration_minutes": 30,
+        "script": "scripts/performance/baseline-load-test.sh"
+      },
+      {
+        "id": "load-test-failover",
+        "name": "Failover Load Test",
+        "description": "Test performance during failover",
+        "user_count": 100,
+        "duration_minutes": 60,
+        "script": "scripts/performance/failover-load-test.sh"
+      },
+      {
+        "id": "stress-test",
+        "name": "Stress Test",
+        "description": "Test system limits",
+        "user_count": 500,
+        "duration_minutes": 20,
+        "script": "scripts/performance/stress-test.sh"
+      }
+    ]
+  }
+}

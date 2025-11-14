@@ -1,0 +1,236 @@
+{
+  "environments": [
+    {
+      "name": "dr-test-dev",
+      "description": "Development environment for DR testing",
+      "type": "development",
+      "vpc": {
+        "cidr": "10.1.0.0/16",
+        "public_subnets": ["10.1.0.0/24", "10.1.1.0/24"],
+        "private_subnets": ["10.1.2.0/24", "10.1.3.0/24"],
+        "enable_flow_logs": true,
+        "flow_logs_retention": 7
+      },
+      "instances": {
+        "web": {
+          "count": 2,
+          "type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0"
+        },
+        "app": {
+          "count": 2,
+          "type": "t3.large",
+          "ami": "ami-0c55b159cbfafe1f0"
+        }
+      },
+      "databases": {
+        "primary": {
+          "engine": "mysql",
+          "version": "8.0.28",
+          "instance_class": "db.t3.medium",
+          "multi_az": true,
+          "storage_gb": 20,
+          "backup_retention_days": 7,
+          "deletion_protection": false
+        }
+      },
+      "load_balancers": {
+        "external": {
+          "type": "application",
+          "internet_facing": true,
+          "idle_timeout": 60
+        },
+        "internal": {
+          "type": "application",
+          "internet_facing": false,
+          "idle_timeout": 60
+        }
+      },
+      "s3_buckets": [
+        {
+          "name": "dr-test-dev-data",
+          "versioning": true,
+          "encryption": true
+        },
+        {
+          "name": "dr-test-dev-logs",
+          "versioning": false,
+          "encryption": true,
+          "lifecycle_rules": [
+            {
+              "prefix": "logs/",
+              "expiration_days": 90
+            }
+          ]
+        }
+      ],
+      "sns_topics": [
+        {
+          "name": "dr-test-dev-alerts",
+          "fifo": false
+        }
+      ],
+      "monitoring": {
+        "enhanced_monitoring": true,
+        "alarm_email": "alerts@example.com"
+      }
+    },
+    {
+      "name": "dr-test-prod",
+      "description": "Production environment for DR testing",
+      "type": "production",
+      "vpc": {
+        "cidr": "10.2.0.0/16",
+        "public_subnets": ["10.2.0.0/24", "10.2.1.0/24"],
+        "private_subnets": ["10.2.2.0/24", "10.2.3.0/24"],
+        "enable_flow_logs": true,
+        "flow_logs_retention": 14
+      },
+      "instances": {
+        "web": {
+          "count": 3,
+          "type": "t3.large",
+          "ami": "ami-0c55b159cbfafe1f0"
+        },
+        "app": {
+          "count": 3,
+          "type": "t3.xlarge",
+          "ami": "ami-0c55b159cbfafe1f0"
+        }
+      },
+      "databases": {
+        "primary": {
+          "engine": "mysql",
+          "version": "8.0.28",
+          "instance_class": "db.r5.large",
+          "multi_az": true,
+          "storage_gb": 50,
+          "backup_retention_days": 30,
+          "deletion_protection": true
+        }
+      },
+      "load_balancers": {
+        "external": {
+          "type": "application",
+          "internet_facing": true,
+          "idle_timeout": 60
+        },
+        "internal": {
+          "type": "application",
+          "internet_facing": false,
+          "idle_timeout": 60
+        }
+      },
+      "s3_buckets": [
+        {
+          "name": "dr-test-prod-data",
+          "versioning": true,
+          "encryption": true
+        },
+        {
+          "name": "dr-test-prod-logs",
+          "versioning": true,
+          "encryption": true,
+          "lifecycle_rules": [
+            {
+              "prefix": "logs/",
+              "expiration_days": 365
+            }
+          ]
+        }
+      ],
+      "sns_topics": [
+        {
+          "name": "dr-test-prod-alerts",
+          "fifo": false
+        }
+      ],
+      "monitoring": {
+        "enhanced_monitoring": true,
+        "alarm_email": "alerts@example.com"
+      }
+    },
+    {
+      "name": "dr-test-dr",
+      "description": "Disaster recovery environment for DR testing",
+      "type": "dr",
+      "region": "us-west-2",
+      "vpc": {
+        "cidr": "10.3.0.0/16",
+        "public_subnets": ["10.3.0.0/24", "10.3.1.0/24"],
+        "private_subnets": ["10.3.2.0/24", "10.3.3.0/24"],
+        "enable_flow_logs": true,
+        "flow_logs_retention": 14
+      },
+      "instances": {
+        "web": {
+          "count": 2,
+          "type": "t3.large",
+          "ami": "ami-0c55b159cbfafe1f0"
+        },
+        "app": {
+          "count": 2,
+          "type": "t3.xlarge",
+          "ami": "ami-0c55b159cbfafe1f0"
+        }
+      },
+      "databases": {
+        "primary": {
+          "engine": "mysql",
+          "version": "8.0.28",
+          "instance_class": "db.r5.large",
+          "multi_az": true,
+          "storage_gb": 50,
+          "backup_retention_days": 7,
+          "deletion_protection": false
+        }
+      },
+      "load_balancers": {
+        "external": {
+          "type": "application",
+          "internet_facing": false,
+          "idle_timeout": 60
+        },
+        "internal": {
+          "type": "application",
+          "internet_facing": false,
+          "idle_timeout": 60
+        }
+      },
+      "s3_buckets": [
+        {
+          "name": "dr-test-dr-data",
+          "versioning": true,
+          "encryption": true
+        },
+        {
+          "name": "dr-test-dr-logs",
+          "versioning": true,
+          "encryption": true,
+          "lifecycle_rules": [
+            {
+              "prefix": "logs/",
+              "expiration_days": 30
+            }
+          ]
+        }
+      ],
+      "sns_topics": [
+        {
+          "name": "dr-test-dr-alerts",
+          "fifo": false
+        }
+      ],
+      "monitoring": {
+        "enhanced_monitoring": true,
+        "alarm_email": "alerts@example.com"
+      },
+      "dr_configuration": {
+        "primary_region": "us-east-1",
+        "rpo_minutes": 15,
+        "rto_minutes": 30,
+        "auto_failover": false
+      }
+    }
+  ]
+}

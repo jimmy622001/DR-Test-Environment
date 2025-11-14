@@ -1,0 +1,53 @@
+name: aws-dr-disaster-recovery-profile
+title: AWS DR Testing for Disaster Recovery Environment Profile
+maintainer: Your Organization
+copyright: Your Organization
+copyright_email: your.email@example.com
+license: Apache-2.0
+summary: InSpec profile for testing AWS disaster recovery environment compliance
+version: 0.1.0
+supports:
+  - platform: aws
+
+depends:
+  - name: aws-dev-profile
+    path: ../dev
+
+inputs:
+  - name: vpc_id
+    type: string
+    required: true
+    description: 'The VPC ID to check'
+  
+  - name: environment
+    type: string
+    required: true
+    description: 'Environment being tested (dev, test, prod, dr)'
+    value: 'dr'
+    
+  - name: rds_db_instance_identifier
+    type: string
+    required: false
+    description: 'RDS DB instance identifier'
+    
+  - name: primary_account_id
+    type: string
+    required: true
+    description: 'The primary account ID where main infrastructure resides'
+    
+  - name: failover_region
+    type: string
+    required: true
+    description: 'The AWS region used for failover'
+    
+  - name: rpo_threshold_minutes
+    type: numeric
+    required: false
+    description: 'Recovery Point Objective (RPO) threshold in minutes'
+    value: 15
+    
+  - name: rto_threshold_minutes
+    type: numeric
+    required: false
+    description: 'Recovery Time Objective (RTO) threshold in minutes'
+    value: 30

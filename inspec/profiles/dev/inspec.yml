@@ -1,0 +1,33 @@
+name: aws-dr-dev-profile
+title: AWS DR Testing Dev Environment Profile
+maintainer: Your Organization
+copyright: Your Organization
+copyright_email: your.email@example.com
+license: Apache-2.0
+summary: InSpec profile for testing AWS development environment compliance
+version: 0.1.0
+supports:
+  - platform: aws
+
+inputs:
+  - name: vpc_id
+    type: string
+    required: true
+    description: 'The VPC ID to check'
+  
+  - name: environment
+    type: string
+    required: true
+    description: 'Environment being tested (dev, test, prod)'
+    value: 'dev'
+    
+  - name: rds_db_instance_identifier
+    type: string
+    required: false
+    description: 'RDS DB instance identifier'
+    
+  - name: s3_bucket_names
+    type: array
+    required: false
+    description: 'S3 bucket names to check'
+    value: []

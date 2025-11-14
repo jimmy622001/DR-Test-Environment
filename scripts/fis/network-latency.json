@@ -1,0 +1,47 @@
+{
+  "description": "Network latency test for EC2 instances",
+  "stopConditions": [
+    {
+      "source": "none"
+    }
+  ],
+  "targets": {
+    "ec2-instances": {
+      "resourceType": "aws:ec2:instance",
+      "resourceTags": {
+        "Environment": "dr-test"
+      },
+      "filters": [
+        {
+          "path": "State.Name",
+          "values": ["running"]
+        }
+      ],
+      "selectionMode": "COUNT(2)"
+    }
+  },
+  "actions": {
+    "network-latency": {
+      "actionId": "aws:network:latency",
+      "parameters": {
+        "duration": "PT5M",
+        "delay": "200",
+        "jitter": "50",
+        "sources": "10.0.0.0/16",
+        "destinations": "0.0.0.0/0",
+        "scope": "availability-zone"
+      },
+      "targets": {
+        "Instances": "ec2-instances"
+      }
+    }
+  },
+  "roleArn": "arn:aws:iam::123456789012:role/FISExecutionRole",
+  "tags": {
+    "Name": "dr-test-network-latency",
+    "Purpose": "Disaster Recovery Testing"
+  },
+  "experimentOptions": {
+    "emptyTargetResolutionMode": "skip"
+  }
+}

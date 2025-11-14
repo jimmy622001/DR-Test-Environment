@@ -1,0 +1,75 @@
+{
+  "regions": [
+    {
+      "code": "eu-west-2",
+      "name": "EU West (London)",
+      "role": "primary",
+      "description": "Primary production region"
+    },
+    {
+      "code": "us-west-1",
+      "name": "US West (Ireland)",
+      "role": "dr",
+      "description": "Disaster recovery region"
+    },
+    {
+      "code": "eu-west-3",
+      "name": "EU West (Paris)",
+      "role": "development",
+      "description": "Development and testing region"
+    }
+  ],
+  "region_pairs": [
+    {
+      "primary": "eu-west-2",
+      "dr": "us-west-2",
+      "distance_miles": 2449,
+      "latency_ms": 80
+    },
+    {
+      "primary": "eu-west-2",
+      "dr": "us-east-2",
+      "distance_miles": 386,
+      "latency_ms": 12
+    },
+    {
+      "primary": "us-east-2",
+      "dr": "us-west-2",
+      "distance_miles": 2174,
+      "latency_ms": 65
+    }
+  ],
+  "services": {
+    "global": [
+      "IAM",
+      "Route53",
+      "CloudFront",
+      "WAF"
+    ],
+    "regional": [
+      "EC2",
+      "RDS",
+      "DynamoDB",
+      "S3",
+      "Lambda",
+      "ECS",
+      "EKS",
+      "CloudWatch",
+      "SNS",
+      "SQS"
+    ],
+    "dr_replication_support": {
+      "RDS": {
+        "mysql": ["read replicas", "snapshot restore"],
+        "postgres": ["read replicas", "snapshot restore"],
+        "oracle": ["read replicas", "snapshot restore"],
+        "sqlserver": ["snapshot restore"],
+        "aurora": ["global database"]
+      },
+      "DynamoDB": ["global tables"],
+      "S3": ["cross-region replication"],
+      "EFS": ["AWS backup"],
+      "EBS": ["snapshot copy"]
+    }
+  }
+}
