@@ -28,13 +28,13 @@
     },
     {
       "primary": "eu-west-2",
-      "dr": "us-east-2",
+      "dr": "eu-west-1",
       "distance_miles": 386,
       "latency_ms": 12
     },
     {
-      "primary": "us-east-2",
-      "dr": "us-west-2",
+      "primary": "eu-west-2",
+      "dr": "eu-west-1",
       "distance_miles": 2174,
       "latency_ms": 65
     }
