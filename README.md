@@ -8,6 +8,7 @@ This repository contains a comprehensive framework for testing disaster recovery
 - Test recovery procedures and ensure they meet RTO/RPO requirements
 - Verify security controls remain effective during disaster scenarios
 - Measure performance under various failure conditions
+- Validate backup and recovery processes
 
 ## Repository Structure
 
@@ -15,16 +16,25 @@ This repository contains a comprehensive framework for testing disaster recovery
 - **runbooks/**: Step-by-step execution guides for test operations
 - **inspec/**: Infrastructure compliance testing profiles
 - **scripts/**: Automation scripts for test operations
+  - **fis/**: AWS Fault Injection Simulator experiment configurations
+  - **monitoring/**: Monitoring and logging validation scripts
+  - **backup-recovery/**: Backup and recovery testing scripts
+  - **setup/**: Environment setup and configuration scripts
 - **test-reports/**: Templates and structure for documenting test results
 - **config/**: Configuration files for test environments
 - **docs/**: Documentation for the testing project
+  - **oat-scenarios/**: Operational Acceptance Testing scenarios
+  - **diagrams/**: Architecture and workflow diagrams
+  - **non-functional-requirements.md**: NFR validation matrix
 
 ## Getting Started
 
 1. Review the test strategy in `docs/test-strategy.md`
 2. Set up your test environment using `runbooks/test-environment-setup.md`
-3. Execute tests following the appropriate playbook
-4. Document results using the templates in `test-reports/templates/`
+3. Review OAT scenarios in `docs/oat-scenarios/`
+4. Execute tests following the appropriate playbook
+5. Validate monitoring and backup systems using scripts in `scripts/monitoring/` and `scripts/backup-recovery/`
+6. Document results using the templates in `test-reports/templates/`
 
 ## Prerequisites
 
